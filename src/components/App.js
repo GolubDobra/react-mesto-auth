@@ -17,10 +17,10 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddCardPopupOpen, setIsAddCardPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [cards, setCards] = React.useState([]);
-  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = React.useState(false);
-  const [deleteCard, setDeleteCard] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [cards, setCards] = useState([]);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [deleteCard, setDeleteCard] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
 
   function handleEditAvatarClick() {
