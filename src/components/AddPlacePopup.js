@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-const PopupAddCard = ({ isOpen, onClose, onAddCard, isLoading }) => {
+const AddPlacePopup = ({ isOpen, onClose, onAddCard, isLoading }) => {
   const [link, setLink] = useState('');
   const [title, setTitle] = useState('');
 
@@ -60,4 +60,4 @@ const PopupAddCard = ({ isOpen, onClose, onAddCard, isLoading }) => {
   );
 };
 
-export default PopupAddCard;
+export default AddPlacePopup;
