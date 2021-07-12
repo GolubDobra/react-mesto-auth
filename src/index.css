@@ -22,6 +22,7 @@
 @import url(./blocks/elements/elements.css);
 @import url(./blocks/element/element.css);
 @import url(./blocks/element/__del-button/card__del-button.css);
+@import url(./blocks/element/__del-button/_hidden/card__del-button_hidden.css);
 @import url(./blocks/element/__image/element__image.css);
 @import url(./blocks/element/__box/element__box.css);
 @import url(./blocks/element/__name/element__name.css);

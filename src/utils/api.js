@@ -20,7 +20,7 @@ class Api {
     });
   }
 
-  updateProfile({ name, status }) {
+  updateProfile(name, status) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
@@ -33,13 +33,13 @@ class Api {
     });
   }
 
-  saveNewCard({ name, url }) {
+  saveNewCard(data) {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
-        name: name,
-        link: url,
+        name: data.name,
+        link: data.link,
       }),
     }).then((res) => {
       return this._getResponseData(res);
@@ -74,6 +74,12 @@ class Api {
     }).then((res) => {
       return this._getResponseData(res);
     });
+  }
+  changeLikeCardStatus(id, isLiked) {
+    if (isLiked) {
+      return this.likeCard(id);
+    }
+    return this.delCardLike(id);
   }
 
   delCardLike(id) {

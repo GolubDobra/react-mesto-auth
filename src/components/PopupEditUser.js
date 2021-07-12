@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PopupWithForm from './PopupWithForm';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-const PopupEditUser = ({ isOpen, onClose }) => {
+const PopupEditUser = ({ isOpen, onClose, onUpdateUser, isLoading }) => {
+  const currentUser = useContext(CurrentUserContext);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    setName(currentUser.name);
+    setDescription(currentUser.about);
+  }, [currentUser, isOpen]);
+
+  function handleChangeName(e) {
+    setName(e.target.value);
+  }
+
+  function handleChangeDescription(e) {
+    setDescription(e.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onUpdateUser({
+      name: name,
+      status: description,
+    });
+  }
   return (
     <PopupWithForm
       name="edit"
       title="Редактировать профиль"
       buttonText="Сохранить"
       isOpen={isOpen}
-      onClose={onClose}>
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      isLoading={isLoading}>
       <input
         id="name"
         name="name"
@@ -17,6 +44,8 @@ const PopupEditUser = ({ isOpen, onClose }) => {
         minLength="2"
         maxLength="40"
         placeholder="Имя"
+        onChange={handleChangeName}
+        value={name ? name : ''}
         required
       />
       <span id="name-error" className="popup__input-error"></span>
@@ -28,6 +57,8 @@ const PopupEditUser = ({ isOpen, onClose }) => {
         minLength="2"
         maxLength="200"
         placeholder="Описание"
+        onChange={handleChangeDescription}
+        value={description ? description : ''}
         required
       />
       <span id="status-error" className="popup__input-error"></span>
