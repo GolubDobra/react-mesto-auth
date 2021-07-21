@@ -135,11 +135,9 @@ function App() {
         setIsInfoTooltipOpen(true);
         history.push('/sign-in');
       })
-      .catch(() => {
+      .catch((err) => {
         setIsInfoTooltipOpen(true);
         setIsRegistrationSuccess(false);
-      })
-      .catch((err) => {
         console.log(`Не удалось зарегистрироваться. Ошибка: ${err}.`);
       });
   };
@@ -205,6 +203,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header loggedIn={loggedIn} userEmail={userEmail} onSignOut={handleSignOut} />
+      <Switch>
       <ProtectedRoute
         path="/"
         component={Main}
@@ -217,7 +216,6 @@ function App() {
         onCardDelete={handleCardDelete}
         cards={cards}
       />
-      <Switch>
         <Route path="/sign-up">
           <Registration onRegister={handleRegister} />
         </Route>

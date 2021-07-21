@@ -11,11 +11,11 @@ const AddPlacePopup = ({ isOpen, onClose, onAddCard, isLoading }) => {
       name: title,
       link: link,
     });
-    setTitle('');
   }
 
   useEffect(() => {
     if (isOpen) {
+      setTitle('');
       setLink('');
     }
   }, [isOpen]);
