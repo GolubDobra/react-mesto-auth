@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 const AddPlacePopup = ({ isOpen, onClose, onAddCard, isLoading }) => {
@@ -11,9 +11,14 @@ const AddPlacePopup = ({ isOpen, onClose, onAddCard, isLoading }) => {
       name: title,
       link: link,
     });
-    setLink('');
     setTitle('');
   }
+
+  useEffect(() => {
+    if (isOpen) {
+      setLink('');
+    }
+  }, [isOpen]);
 
   function handleChangeTitle(e) {
     setTitle(e.target.value);

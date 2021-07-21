@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -29,23 +29,23 @@ function App() {
   const [deleteCard, setDeleteCard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-  const [isRegistrationSuccess, setIsRegistrationSuccess] = React.useState(false);
-  const [userEmail, setUserEmail] = React.useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
-  }
+  };
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
-  }
+  };
   const handleAddPlaceClick = () => {
     setIsAddCardPopupOpen(true);
-  }
+  };
   const handleCardClick = (card) => {
     setSelectedCard(card);
-  }
+  };
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -56,24 +56,27 @@ function App() {
     setSelectedCard(null);
 
     setIsConfirmPopupOpen(false);
-  }
+  };
 
   const handleCardLike = (card) => {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
-  }
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+      })
+      .catch((err) => console.log(err));
+  };
 
   const handleCardDelete = (card) => {
     setIsConfirmPopupOpen(true);
     setDeleteCard(card);
-  }
+  };
 
-  const handleCardDeleteConfirm = (card) =>{
+  const handleCardDeleteConfirm = (card) => {
     setIsLoading(true);
     api
       .deleteCard(card._id)
@@ -84,7 +87,7 @@ function App() {
       })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
-  }
+  };
 
   const handleUpdateAvatar = (data) => {
     setIsLoading(true);
@@ -96,7 +99,7 @@ function App() {
       })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
-  }
+  };
 
   const handleUpdateUser = (data) => {
     setIsLoading(true);
@@ -108,7 +111,7 @@ function App() {
       })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
-  }
+  };
 
   const handleAddPlaceSubmit = (data) => {
     setIsLoading(true);
@@ -120,14 +123,14 @@ function App() {
       })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
-  }
+  };
 
   // регистрация аутентификация и авторизация
   const handleRegister = (email, password) => {
     return auth
       .register(email, password)
       .then((res) => {
-        localStorage.setItem('token', res.token);
+        // localStorage.setItem('token', res.token);
         setIsRegistrationSuccess(true);
         setIsInfoTooltipOpen(true);
         history.push('/sign-in');
@@ -139,20 +142,21 @@ function App() {
       .catch((err) => {
         console.log(`Не удалось зарегистрироваться. Ошибка: ${err}.`);
       });
-  }
+  };
 
   const handleLogin = (email, password) => {
     return auth
       .authorization(email, password)
       .then((res) => {
         localStorage.setItem('token', res.token);
+        setUserEmail(email);
         setLoggedIn(true);
         history.push('/');
       })
       .catch((err) => {
         console.log(`Не удалось войти. Ошибка: ${err}.`);
       });
-  }
+  };
 
   const checkToken = () => {
     const token = localStorage.getItem('token');
@@ -170,18 +174,18 @@ function App() {
       console.log('Нет токена');
       return;
     }
-  }
+  };
 
   const handleSignOut = () => {
     localStorage.removeItem('token');
     setLoggedIn(false);
     setUserEmail('');
-    history.push('/sihn-in');
-  }
+    history.push('/sign-in');
+  };
 
   useEffect(() => {
     checkToken();
-  }, [loggedIn]);
+  }, []);
 
   useEffect(() => {
     if (loggedIn) {
@@ -213,13 +217,15 @@ function App() {
         onCardDelete={handleCardDelete}
         cards={cards}
       />
-      <Route path="/sign-up">
-        <Registration onRegister={handleRegister} />
-      </Route>
-      <Route path="/sign-in">
-        <Login onLogin={handleLogin} />
-      </Route>
-      <Route>{loggedIn ? <Redirect to="/" /> : <Redirect to="sign-in" />}</Route>
+      <Switch>
+        <Route path="/sign-up">
+          <Registration onRegister={handleRegister} />
+        </Route>
+        <Route path="/sign-in">
+          <Login onLogin={handleLogin} />
+        </Route>
+        <Route>{loggedIn ? <Redirect to="/" /> : <Redirect to="sign-in" />}</Route>
+      </Switch>
       <Footer />
       {loggedIn ? (
         <>
