@@ -205,7 +205,7 @@ function App() {
       <Header loggedIn={loggedIn} userEmail={userEmail} onSignOut={handleSignOut} />
       <Switch>
       <ProtectedRoute
-        path="/"
+        exact path="/"
         component={Main}
         loggedIn={loggedIn}
         onCardClick={handleCardClick}
